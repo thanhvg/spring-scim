@@ -1,0 +1,25 @@
+:PROPERTIES:
+:CATEGORY: scim
+:END:
+https://stackoverflow.com/questions/68297777/using-jax-rs-rest-api-as-a-library-in-a-spring-boot-application/68298555#68298555
+
+You can use Jersey and Spring MVC at the same type, but you need to configure Jersey to allow you to do so.
+
+First, Jersey should be configured to work as a filter rather than as a servlet. To do this, set ~spring.jersey.type~ to ~filter~ in your ~application.properties~ file.
+
+Second, Jersey must be configured to forward requests that it can't handle itself. This allows the request to reach Spring MVC's ~DispatcherServlet~ from where it will be dispatched to your Spring MVC controllers, Spring Data REST endpoints, etc. To do this, set the ~FILTER_FORWARD_ON_404~ property in your ~ResourceConfig~:
+
+#+begin_example java
+@Component
+public class JerseyConfig extends ResourceConfig {
+
+    public JerseyConfig() {
+        // Endpoint registrations
+        property(ServletProperties.FILTER_FORWARD_ON_404, true);
+    }
+
+}
+#+end_example
+
+* TODO bring in scim
+

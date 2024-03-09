@@ -37,6 +37,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+    <dependency>
+      <groupId>org.apache.directory.scimple</groupId>
+      <artifactId>scim-spring-boot-starter</artifactId>
+      <version>1.0.0-M1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.scimple</groupId>
+      <artifactId>scim-server</artifactId>
+      <version>1.0.0-M1</version>
+    </dependency>
+
 	</dependencies>
 
 	<build>
