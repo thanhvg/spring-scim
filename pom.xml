@@ -17,6 +17,13 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -43,6 +50,7 @@
       <artifactId>scim-spring-boot-starter</artifactId>
       <version>1.0.0-M1</version>
     </dependency>
+
     <dependency>
       <groupId>org.apache.directory.scimple</groupId>
       <artifactId>scim-server</artifactId>
