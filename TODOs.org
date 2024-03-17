@@ -20,6 +20,6 @@ public class JerseyConfig extends ResourceConfig {
 
 }
 #+end_example
-
+* run
+mvn spring-boot:run
 * TODO bring in scim
-
