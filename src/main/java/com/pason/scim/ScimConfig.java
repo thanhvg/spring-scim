@@ -50,72 +50,73 @@ import jakarta.ws.rs.core.Application;
  * Autoconfigures default beans needed for Apache SCIMple.
  */
 @Configuration
-@AutoConfigureBefore(ScimpleSpringConfiguration.class)
+@AutoConfigureBefore(ScimpleSpringConfiguration.class) // before the scim boot starter configuration
 public class ScimConfig {
 
-  @Bean
-  @ConditionalOnMissingBean
-  ServerConfiguration serverConfiguration() {
-    return new ServerConfiguration();
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    ServerConfiguration serverConfiguration() {
+        return new ServerConfiguration();
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  EtagGenerator etagGenerator() {
-    return new EtagGenerator();
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    EtagGenerator etagGenerator() {
+        return new EtagGenerator();
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  SchemaRegistry schemaRegistry() {
-    return new SchemaRegistry();
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    SchemaRegistry schemaRegistry() {
+        return new SchemaRegistry();
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  PatchHandler patchHandler(SchemaRegistry schemaRegistry) {
-    return new DefaultPatchHandler(schemaRegistry);
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    PatchHandler patchHandler(SchemaRegistry schemaRegistry) {
+        return new DefaultPatchHandler(schemaRegistry);
+    }
 
+    @Bean
+    @ConditionalOnMissingBean
+    RepositoryRegistry repositoryRegistry(SchemaRegistry schemaRegistry,
+            List<Repository<? extends ScimResource>> scimResources) {
+        RepositoryRegistry registry = new RepositoryRegistry(schemaRegistry);
+        registry.registerRepositories(scimResources);
+        return registry;
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  RepositoryRegistry repositoryRegistry(SchemaRegistry schemaRegistry, List<Repository<? extends ScimResource>> scimResources) {
-    RepositoryRegistry registry = new RepositoryRegistry(schemaRegistry);
-    registry.registerRepositories(scimResources);
-    return registry;
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    Application jaxrsApplication() {
+        return new ScimpleJaxRsApplication();
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  Application jaxrsApplication() {
-    return new ScimpleJaxRsApplication();
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public ResourceConfig conf(Application app) {
+        ResourceConfig config = ResourceConfig.forApplication(app);
 
-  @Bean
-  @ConditionalOnMissingBean
-  public ResourceConfig conf(Application app) {
-    ResourceConfig config = ResourceConfig.forApplication(app);
-
+        // register swagger
         config.register(OpenApiResource.class);
 
-    config.register(new AbstractBinder() {
-      @Override
-      protected void configure() {
-        bind(UserResourceImpl.class).to(UserResource.class); // Used by SelfResource
-      }
-    });
-    return config;
-  }
-
-  /**
-   * Basic JAX-RS application that includes the required SCIMple classes.
-   */
-  static class ScimpleJaxRsApplication extends Application {
-    @Override
-    public Set<Class<?>> getClasses() {
-      return ScimResourceHelper.scimpleFeatureAndResourceClasses();
+        config.register(new AbstractBinder() {
+            @Override
+            protected void configure() {
+                bind(UserResourceImpl.class).to(UserResource.class); // Used by SelfResource
+            }
+        });
+        return config;
     }
-  }
+
+    /**
+     * Basic JAX-RS application that includes the required SCIMple classes.
+     */
+    static class ScimpleJaxRsApplication extends Application {
+        @Override
+        public Set<Class<?>> getClasses() {
+            return ScimResourceHelper.scimpleFeatureAndResourceClasses();
+        }
+    }
 
 }
