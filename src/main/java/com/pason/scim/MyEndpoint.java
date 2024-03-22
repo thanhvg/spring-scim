@@ -6,7 +6,7 @@ import jakarta.ws.rs.Path;
 import org.springframework.stereotype.Component;
 
 @Component
-@Path("/hello")
+@Path("/j/hello")
 public class MyEndpoint {
 
     @GET

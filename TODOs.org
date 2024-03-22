@@ -23,3 +23,5 @@ public class JerseyConfig extends ResourceConfig {
 * run
 mvn spring-boot:run
 * TODO bring in scim
+* swagger in spring boot
+https://springdoc.org/
